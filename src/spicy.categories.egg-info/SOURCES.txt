@@ -1,0 +1,15 @@
+src/spicy/__init__.py
+src/spicy.categories.egg-info/PKG-INFO
+src/spicy.categories.egg-info/SOURCES.txt
+src/spicy.categories.egg-info/dependency_links.txt
+src/spicy.categories.egg-info/not-zip-safe
+src/spicy.categories.egg-info/requires.txt
+src/spicy.categories.egg-info/top_level.txt
+src/spicy/categories/__init__.py
+src/spicy/categories/admin.py
+src/spicy/categories/forms.py
+src/spicy/categories/models.py
+src/spicy/categories/urls.py
+src/spicy/categories/templatetags/__init__.py
+src/spicy/categories/templatetags/categories.py
+src/spicy/categories/templatetags/docs.py
