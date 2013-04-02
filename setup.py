@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-"""Setup file for easy installation"""
+# coding: utf-8
+"""spicy.categories"""
 from setuptools import setup, find_packages
 
 
 LONG_DESCRIPTION = """
-Django extension toolkit
+spicy.categories package
 """
 
 
@@ -36,14 +36,11 @@ setup(
 
     long_description=long_description(),
 
-    # namespace_packages=[
-    #   'spicy',
-    # ],
     install_requires=[
-        'Spicy==1.1',
+        'spicy==1.1',
     ],
     dependency_links=[
-        'http://hg.bramabrama.com/spicy#egg=spicy',
+        'hg+http://hg.bramabrama.com/spicy#egg=spicy-1.1',
     ],
 
     classifiers=[
