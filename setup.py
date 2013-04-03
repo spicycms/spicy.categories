@@ -1,8 +1,9 @@
-# coding: utf-8
 """spicy.categories"""
+from importlib import import_module
 from setuptools import setup, find_packages
 
 
+version = import_module('src').__version__
 LONG_DESCRIPTION = """
 spicy.categories package
 """
