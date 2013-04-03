@@ -33,16 +33,13 @@ setup(
     },
     include_package_data=True,
     zip_safe=False,
-
     long_description=long_description(),
-
     install_requires=[
         'spicy==1.1',
     ],
     dependency_links=[
         'hg+http://hg.bramabrama.com/spicy#egg=spicy-1.1',
     ],
-
     classifiers=[
         'Framework :: Django',
         'Development Status :: 4 - Beta',
