@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-from categories import models
 from datetime import datetime
 from django.conf import settings
 from django import template
@@ -7,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 
 from spicy.core.errors import EmptyModelError
-
+from spicy.categories import models
 
 # TODO: make default value for categories
 DEFAULT_CATEGORIES_OBJECTS_PER_PAGE = getattr(settings, 'DEFAULT_CATEGORIES_OBJECTS_PER_PAGE', 10)
