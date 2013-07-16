@@ -1,19 +1,46 @@
 # coding=utf-8
-from . import forms, models
 from django import http
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
+
+from spicy.core.admin.conf import AdminAppBase, AdminLink, Perms
 from spicy.core.profile.decorators import is_staff
 from spicy.core.siteskin.common import NavigationFilter
 from spicy.core.siteskin.decorators import ajax_request, render_to
 
+from . import forms, models
+
+
+class AdminApp(AdminAppBase):
+    name = 'categories'
+    label = _('Categories')
+    order_number = 3
+
+    menu_items = (
+        AdminLink('categories:admin:create', _('Create category')),
+        AdminLink('categories:admin:index', _('All categories')),
+    )
+
+    create = AdminLink('categories:admin:create', _('Create category'),)
+
+    perms = Perms(view=[],  write=[], manage=[])
+
+    @render_to('menu.html', use_admin=True)
+    def menu(self, request, *args, **kwargs):
+        return dict(app=self, *args, **kwargs)
+
+    @render_to('dashboard.html', use_admin=True)
+    def dashboard(self, request, *args, **kwargs):
+        return dict(app=self, *args, **kwargs)
+
+
 
 @is_staff(required_perms='categories.change_category')
-@render_to('categories/index.html', use_admin=True)
-def categories(request):
+@render_to('list.html', use_admin=True)
+def list(request):
     nav = NavigationFilter(request)
     paginator = nav.get_queryset_with_paginator(models.Category)
     objects_list = paginator.current_page.object_list
@@ -21,8 +48,8 @@ def categories(request):
 
 
 @is_staff(required_perms='categories.add_category')
-@render_to('categories/add.html', use_admin=True)
-def category_add(request):
+@render_to('create.html', use_admin=True)
+def create(request):
     if request.method == 'POST':
         form = forms.CategoryForm(request.POST)
         if form.is_valid():
@@ -35,8 +62,8 @@ def category_add(request):
 
 
 @is_staff(required_perms='categories.change_category')
-@render_to('categories/edit.html', use_admin=True)
-def category_edit(request, category_id):
+@render_to('edit.html', use_admin=True)
+def edit(request, category_id):
     category = get_object_or_404(models.Category, pk=category_id)
     if request.method == 'POST':
         form = forms.CategoryForm(request.POST, instance=category)
@@ -50,10 +77,27 @@ def category_edit(request, category_id):
 
 
 @is_staff(required_perms='categories.delete_category')
-@ajax_request
-def categories_delete(request):
+@render_to('delete.html', use_admin=True)
+def delete(request, category_id):
     message = ''
     status = 'ok'
+
+    category = get_object_or_404(models.Category, pk=category_id)
+
+    if request.method == 'POST':
+        if 'confirm' in request.POST:
+            category.delete()
+            return http.HttpResponseRedirect(
+                reverse('categories:admin:index'))
+
+    return dict(message=unicode(message), status=status, instance=category)
+
+
+@is_staff(required_perms='categories.delete_category')
+@ajax_request
+def delete_from_list(request):
+    message = ''
+    status = 'ok'    
     try:
         for category in models.Category.objects.filter(
             id__in=request.POST.getlist('id')):

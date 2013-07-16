@@ -5,10 +5,10 @@ admin_urls = patterns(
     'spicy.categories.admin',
 
     # Categories
-    url(r'^$', 'categories', name='index'),
-    url(r'^add/$', 'category_add', name='add'),
-    url(r'^(?P<category_id>\d+)/$', 'category_edit', name='edit'),
-    url(r'^delete/$', 'categories_delete', name='delete'),
+    url(r'^$', 'list', name='index'),
+    url(r'^create/$', 'create', name='create'),
+    url(r'^(?P<category_id>\d+)/$', 'edit', name='edit'),
+    url(r'^delete/(?P<category_id>\d+)/$', 'delete', name='delete'),
 )
 
 
