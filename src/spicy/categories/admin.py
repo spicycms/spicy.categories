@@ -40,7 +40,7 @@ class AdminApp(AdminAppBase):
 
 @is_staff(required_perms='categories.change_category')
 @render_to('list.html', use_admin=True)
-def list(request):
+def category_list(request):
     nav = NavigationFilter(request)
     paginator = nav.get_queryset_with_paginator(models.Category)
     objects_list = paginator.current_page.object_list

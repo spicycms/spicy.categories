@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 class Category(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField()
-    order_lv = models.PositiveSmallIntegerField()
+    order_lv = models.PositiveSmallIntegerField(default=0)
 
     site = models.ForeignKey(Site, verbose_name=_('Site'))
 
