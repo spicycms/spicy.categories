@@ -86,6 +86,7 @@ class CategoryNode(template.Node):
             paginator = Paginator(objects, self.num_per_page.resolve(context))
             context['paginator'] = paginator
             page = paginator.page(page_num)
+            context['pages']=page
             paginator.current_page = page
             objs = page.object_list
         else:
