@@ -6,10 +6,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from spicy.categories import defaults
 from spicy.core.errors import EmptyModelError
-from spicy.utils import get_custom_model
+from spicy.utils import get_custom_model_class
 
 
-Category = get_custom_model(defaults.CUSTOM_CATEGORY_MODEL)
+Category = get_custom_model_class(defaults.CUSTOM_CATEGORY_MODEL)
 
 
 # TODO: make default value for categories
