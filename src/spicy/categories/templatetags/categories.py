@@ -4,20 +4,26 @@ from django.conf import settings
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
-
+from spicy.categories import defaults
 from spicy.core.errors import EmptyModelError
-from spicy.categories import models
+from spicy.utils import get_custom_model
+
+
+Category = get_custom_model(defaults.CUSTOM_CATEGORY_MODEL)
+
 
 # TODO: make default value for categories
-DEFAULT_CATEGORIES_OBJECTS_PER_PAGE = getattr(settings, 'DEFAULT_CATEGORIES_OBJECTS_PER_PAGE', 10)
+DEFAULT_CATEGORIES_OBJECTS_PER_PAGE = getattr(
+    settings, 'DEFAULT_CATEGORIES_OBJECTS_PER_PAGE', 10)
 
 register = template.Library()
 
 
 class CategoryNode(template.Node):
-    def __init__(self, nodelist, slug, app=None, model=None, num_per_page=None,
-                 paginate=False, object_name='doc', filter_query=None, labels=None,
-                 show_all=False):
+    def __init__(
+            self, nodelist, slug, app=None, model=None, num_per_page=None,
+            paginate=False, object_name='doc', filter_query=None, labels=None,
+            show_all=False):
         self.nodelist = nodelist
         self.slug = template.Variable(slug)
         self.app = template.Variable(app)
@@ -86,7 +92,7 @@ class CategoryNode(template.Node):
             paginator = Paginator(objects, self.num_per_page.resolve(context))
             context['paginator'] = paginator
             page = paginator.page(page_num)
-            context['pages']=page
+            context['pages'] = page
             paginator.current_page = page
             objs = page.object_list
         else:
@@ -124,8 +130,10 @@ def category(parser, token):
         {% endcategory %}
 
     Documents can be filtered (only simple queries are implemented):
-        {% category "blog" "presscenter" "document" all 10 where owner__is_banned=True %}
-        Document {{ doc }} from a user that isn't banned. Parameter "all" disables default filtering.
+        {% category "blog" "presscenter" "document" all 10 where
+         owner__is_banned=True %}
+        Document {{ doc }} from a user that isn't banned. Parameter "all"
+         disables default filtering.
         {% endcategory %}
     """
     bits = token.split_contents()
@@ -180,6 +188,6 @@ def category(parser, token):
 @register.filter
 def category_by_slug(value):
     try:
-        return models.Category.objects.get(slug=value)
-    except models.Category.DoesNotExist:
+        return Category.objects.get(slug=value)
+    except Category.DoesNotExist:
         return

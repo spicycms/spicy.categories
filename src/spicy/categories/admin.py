@@ -5,13 +5,15 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-
 from spicy.core.admin.conf import AdminAppBase, AdminLink, Perms
 from spicy.core.profile.decorators import is_staff
 from spicy.core.siteskin.common import NavigationFilter
 from spicy.core.siteskin.decorators import ajax_request, render_to
+from spicy.utils import get_custom_model_class
+from . import defaults, forms
 
-from . import forms, models
+
+Category = get_custom_model_class(defaults.CUSTOM_CATEGORY_MODEL)
 
 
 class AdminApp(AdminAppBase):
@@ -37,12 +39,11 @@ class AdminApp(AdminAppBase):
         return dict(app=self, *args, **kwargs)
 
 
-
 @is_staff(required_perms='categories.change_category')
 @render_to('list.html', use_admin=True)
 def category_list(request):
     nav = NavigationFilter(request)
-    paginator = nav.get_queryset_with_paginator(models.Category)
+    paginator = nav.get_queryset_with_paginator(Category)
     objects_list = paginator.current_page.object_list
     return {'paginator': paginator, 'objects_list': objects_list, 'nav': nav}
 
@@ -54,8 +55,7 @@ def create(request):
         form = forms.CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return http.HttpResponseRedirect(reverse(
-                'categories:admin:index'))
+            return http.HttpResponseRedirect(reverse('categories:admin:index'))
     else:
         form = forms.CategoryForm(initial={'site': Site.objects.get_current()})
     return {'form': form}
@@ -64,7 +64,7 @@ def create(request):
 @is_staff(required_perms='categories.change_category')
 @render_to('edit.html', use_admin=True)
 def edit(request, category_id):
-    category = get_object_or_404(models.Category, pk=category_id)
+    category = get_object_or_404(Category, pk=category_id)
     if request.method == 'POST':
         form = forms.CategoryForm(request.POST, instance=category)
         if form.is_valid():
@@ -82,7 +82,7 @@ def delete(request, category_id):
     message = ''
     status = 'ok'
 
-    category = get_object_or_404(models.Category, pk=category_id)
+    category = get_object_or_404(Category, pk=category_id)
 
     if request.method == 'POST':
         if 'confirm' in request.POST:
@@ -97,10 +97,10 @@ def delete(request, category_id):
 @ajax_request
 def delete_from_list(request):
     message = ''
-    status = 'ok'    
+    status = 'ok'
     try:
-        for category in models.Category.objects.filter(
-            id__in=request.POST.getlist('id')):
+        for category in Category.objects.filter(
+                id__in=request.POST.getlist('id')):
             category.delete()
         message = _('All objects have been deleted successfully')
     except KeyError:

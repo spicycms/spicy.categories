@@ -4,16 +4,17 @@ from presscenter import parsers
 
 register = template.Library()
 
+
 @register.filter
 @stringfilter
 def stripped_paragraphs(text):
     """
     {{ var|stripped_tag }}
-    Returns a list of paragraphs with HTML stripped.    
+    Returns a list of paragraphs with HTML stripped.
     """
     parser = parsers.StrippingParagraphHTMLParser()
     parser.feed(text)
-    parser.close()    
+    parser.close()
     return parser.paragraphs_gen()
 
 
@@ -31,7 +32,7 @@ class DocsNode(template.Node):
                 related_issue.document_set.all().order_by('order_lv'))
         context[self.data.var] = data
         return ''
-        
+
 
 @register.tag
 def extend_with_related_issues(parser, token):
