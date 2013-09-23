@@ -5,9 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class AbstractCategory(models.Model):
-    title = models.CharField(max_length=100)
-    slug = models.SlugField()
-    order_lv = models.PositiveSmallIntegerField(default=0)
+    title = models.CharField(_('Title'), max_length=100)
+    slug = models.SlugField(_('Slug'))
+    order_lv = models.PositiveSmallIntegerField(_('Position'), default=0)
 
     site = models.ForeignKey(Site, verbose_name=_('Site'))
 

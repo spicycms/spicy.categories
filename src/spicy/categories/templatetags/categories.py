@@ -192,6 +192,7 @@ def category_by_slug(value):
     except Category.DoesNotExist:
         return
 
+
 @register.simple_tag(takes_context=True)
 def all_category(context):
     context['category'] = Category.objects.select_related()
