@@ -10,6 +10,7 @@ from spicy.core.profile.decorators import is_staff
 from spicy.core.siteskin.common import NavigationFilter
 from spicy.core.siteskin.decorators import ajax_request, render_to
 from spicy.utils import get_custom_model_class
+from spicy.utils.permissions import *
 from . import defaults, forms
 
 
@@ -39,7 +40,7 @@ class AdminApp(AdminAppBase):
         return dict(app=self, *args, **kwargs)
 
 
-@is_staff(required_perms='categories.change_category')
+@is_staff(required_perms='categories')
 @render_to('list.html', use_admin=True)
 def category_list(request):
     nav = NavigationFilter(request)
@@ -48,7 +49,7 @@ def category_list(request):
     return {'paginator': paginator, 'objects_list': objects_list, 'nav': nav}
 
 
-@is_staff(required_perms='categories.add_category')
+@is_staff(required_perms=add_perm(defaults.CUSTOM_CATEGORY_MODEL))
 @render_to('create.html', use_admin=True)
 def create(request):
     if request.method == 'POST':
@@ -61,7 +62,7 @@ def create(request):
     return {'form': form}
 
 
-@is_staff(required_perms='categories.change_category')
+@is_staff(required_perms=change_perm(defaults.CUSTOM_CATEGORY_MODEL))
 @render_to('edit.html', use_admin=True)
 def edit(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
@@ -76,7 +77,7 @@ def edit(request, category_id):
     return {'form': form}
 
 
-@is_staff(required_perms='categories.delete_category')
+@is_staff(required_perms=delete_perm(defaults.CUSTOM_CATEGORY_MODEL))
 @render_to('delete.html', use_admin=True)
 def delete(request, category_id):
     message = ''
@@ -93,7 +94,7 @@ def delete(request, category_id):
     return dict(message=unicode(message), status=status, instance=category)
 
 
-@is_staff(required_perms='categories.delete_category')
+@is_staff(required_perms=delete_perm(defaults.CUSTOM_CATEGORY_MODEL))
 @ajax_request
 def delete_from_list(request):
     message = ''

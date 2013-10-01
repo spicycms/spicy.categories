@@ -1,6 +1,5 @@
-{% if perms.presscenter %}{% load url from future %}
+{% if perms.categories %}{% load url from future %}
 
-{% with perms.profile as pm %}
 <li class="dark-nav{% if "/admin/categories" in request.path %} active{% endif %}">
   <span class="glow"></span>
   <a class="accordion-toggle collapsed" data-toggle="collapse" href="#categories">
@@ -10,18 +9,19 @@
     </span>
   </a>
 
-  <ul id="categories" class="collapse {% if "/admin/categories" in request.path %} in{% endif %}">
+  <ul id="categories" class="collapse {% if "/admin/categories/" in request.path %} in{% endif %}">
+    {% if perms.categories.add_category %}
     <li>
       <a href="{% url 'categories:admin:create' %}">
         <i class="icon-plus-sign-alt"></i> {% trans "Create category" %}
       </a>
     </li>
+    {% endif %}
     <li>
       <a href="{% url 'categories:admin:index' %}">
         <i class="icon-list-alt"></i> {% trans "All categories" %}
       </a>
     </li>    
-  </ul>
+  </ul>  
 </li>
-{% endwith %}
 {% endif %}
