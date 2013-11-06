@@ -59,8 +59,11 @@ class CategoryNode(template.Node):
         except AttributeError:
             return EmptyModelError(app, model)
 
-        if slug:
-            objects = objects.filter(category__slug=slug)
+        try:
+            if slug:
+                objects = objects.filter(category__slug=slug)
+        except obj_type.model_class().DoesNotExist:
+            pass
 
         def get_vars((k, v)):
             try:
