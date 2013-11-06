@@ -42,8 +42,11 @@ class CategoryNode(template.Node):
         for var in (True, False, None):
             # Not needed in Django 1.5?
             context[unicode(var)] = var
-
-        slug = self.slug.resolve(context)
+        
+        try:
+            slug = self.slug.resolve(context)
+        except:
+            slug = None 
         app = self.app.resolve(context)
         model = self.model.resolve(context)
 
@@ -56,11 +59,8 @@ class CategoryNode(template.Node):
         except AttributeError:
             return EmptyModelError(app, model)
 
-        try:
-            if slug:
-                objects = objects.filter(category__slug=slug)
-        except obj_type.model_class().DoesNotExist:
-            pass
+        if slug:
+            objects = objects.filter(category__slug=slug)
 
         def get_vars((k, v)):
             try:
