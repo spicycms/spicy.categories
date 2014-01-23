@@ -7,9 +7,8 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from spicy.core.admin.conf import AdminAppBase, AdminLink, Perms
 from spicy.core.profile.decorators import is_staff
-from spicy.core.siteskin.common import NavigationFilter
 from spicy.core.siteskin.decorators import ajax_request, render_to
-from spicy.utils import get_custom_model_class
+from spicy.utils import get_custom_model_class, NavigationFilter
 from spicy.utils.permissions import *
 from . import defaults, forms
 
