@@ -8,13 +8,14 @@ from django.utils.translation import ugettext_lazy as _
 from spicy.core.admin.conf import AdminAppBase, AdminLink, Perms
 from spicy.core.profile.decorators import is_staff
 from spicy.core.siteskin.decorators import ajax_request, render_to
-from spicy.utils import get_custom_model_class, NavigationFilter
+from spicy.utils import get_custom_model_class, NavigationFilter, load_module
 from spicy.utils.permissions import *
-from . import defaults, forms
+from . import defaults
 
 
 Category = get_custom_model_class(defaults.CUSTOM_CATEGORY_MODEL)
-
+CategoryEditForm = load_module(defaults.CREATE_CATEGORY_FORM)
+CategoryCreateForm = load_module(defaults.CREATE_CATEGORY_FORM)
 
 class AdminApp(AdminAppBase):
     name = 'categories'
@@ -52,12 +53,12 @@ def category_list(request):
 @render_to('create.html', use_admin=True)
 def create(request):
     if request.method == 'POST':
-        form = forms.CategoryForm(request.POST)
+        form = CategoryCreateForm(request.POST)
         if form.is_valid():
             form.save()
             return http.HttpResponseRedirect(reverse('categories:admin:index'))
     else:
-        form = forms.CategoryForm(initial={'site': Site.objects.get_current()})
+        form = CategoryCreateForm(initial={'site': Site.objects.get_current()})
     return {'form': form}
 
 
@@ -66,13 +67,13 @@ def create(request):
 def edit(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     if request.method == 'POST':
-        form = forms.CategoryForm(request.POST, instance=category)
+        form = CategoryEditForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
             return http.HttpResponseRedirect(reverse(
                 'categories:admin:index'))
     else:
-        form = forms.CategoryForm(instance=category)
+        form = CategoryEditForm(instance=category)
     return {'form': form}
 
 
