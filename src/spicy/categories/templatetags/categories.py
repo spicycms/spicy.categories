@@ -184,9 +184,7 @@ def category(parser, token):
                 options['filter_query'] = obj_name
             continue
         elif option == 'sorted':
-            sort_by = remaining_bits.pop(0)
-            if sort_by == 'draft':
-                options['sort'] = sort_by
+            options['sort'] = remaining_bits.pop(0)
             continue
         else:
             raise template.TemplateSyntaxError('Invalid category block syntax')
