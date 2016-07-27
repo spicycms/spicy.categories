@@ -23,7 +23,7 @@ class CategoryNode(template.Node):
     def __init__(
             self, nodelist, slug, app=None, model=None, num_per_page=None,
             paginate=False, object_name='doc', filter_query=None, labels=None,
-            show_all=False):
+            show_all=False, sort=None):
         self.nodelist = nodelist
         self.slug = template.Variable(slug)
         self.app = template.Variable(app)
@@ -35,6 +35,7 @@ class CategoryNode(template.Node):
         self.paginate = paginate
         self.object_name = object_name
         self.show_all = show_all
+        self.sort = sort
         self.filter_query = [
             q.split('=') for q in (filter_query or '').split(',') if q]
 
@@ -56,6 +57,8 @@ class CategoryNode(template.Node):
             if not self.show_all:
                 objects = objects.filter(
                     is_public=True, pub_date__lte=datetime.now())
+            if self.sort:
+                objects = objects.order_by(self.sort)
         except AttributeError:
             return EmptyModelError(app, model)
 
@@ -179,6 +182,11 @@ def category(parser, token):
                 options['object_name'] = obj_name
             else:
                 options['filter_query'] = obj_name
+            continue
+        elif option == 'sorted':
+            sort_by = remaining_bits.pop(0)
+            if sort_by == 'draft':
+                options['sort'] = sort_by
             continue
         else:
             raise template.TemplateSyntaxError('Invalid category block syntax')
