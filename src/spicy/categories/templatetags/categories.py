@@ -57,8 +57,6 @@ class CategoryNode(template.Node):
             if not self.show_all:
                 objects = objects.filter(
                     is_public=True, pub_date__lte=datetime.now())
-            if self.sort:
-                objects = objects.order_by(self.sort)
         except AttributeError:
             return EmptyModelError(app, model)
 
@@ -73,6 +71,9 @@ class CategoryNode(template.Node):
                 return k, template.Variable(v).resolve(context)
             except template.VariableDoesNotExist:
                 return ()
+
+        if self.sort:
+            objects = objects.order_by(*self.sort)
 
         if self.filter_query:
             objects = objects.filter(
@@ -141,6 +142,12 @@ def category(parser, token):
         Document {{ doc }} from a user that isn't banned. Parameter "all"
          disables default filtering.
         {% endcategory %}
+
+    Documents can be sorted by several fields:
+        {% category "blog" "presscenter" "document" sorted title -pub_date %}
+        Document {{ doc }} sorted by title field ascending and pub_date
+         field descending.
+        {% endcategory %}
     """
     bits = token.split_contents()
 
@@ -184,8 +191,8 @@ def category(parser, token):
                 options['filter_query'] = obj_name
             continue
         elif option == 'sorted':
-            options['sort'] = remaining_bits.pop(0)
-            continue
+            options['sort'] = remaining_bits
+            break
         else:
             raise template.TemplateSyntaxError('Invalid category block syntax')
 
