@@ -213,3 +213,13 @@ def category_by_slug(value):
 def all_category(context):
     context['category'] = Category.objects.select_related()
     return ""
+
+
+@register.filter(name='get_attr')
+def get_attribute(string, attr, separator='<br>'):
+    has_attr = string.find(attr)
+    if has_attr > -1:
+        string = string[has_attr+len(attr)::]
+        stop_pos = string.find(separator)
+        return string[1:stop_pos]
+    return ''
