@@ -215,18 +215,8 @@ def all_category(context):
     return ""
 
 
-@register.simple_tag(name='get_attr')
-def get_attribute(string, attr, separator):
-    """
-    Finds attribute by its name in string
-
-    :param string
-    :param attr - name of attribute to find in string
-    :param separator - defines stop index of search (<br>|</p>|</hr> etc.)
-
-    {% get_attr <string_variable> <attr_name> </p> %} - search attr_name in string
-
-    """
+@register.filter(name='get_attr')
+def get_attribute(string, attr, separator='<br>'):
     has_attr = string.find(attr)
     if has_attr > -1:
         string = string[has_attr+len(attr)::]
