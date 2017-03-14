@@ -20,9 +20,9 @@ def long_description():
 
 setup(
     name='spicy.categories',
-    version='1.0',
-    author='Burtsev Alexander',
-    author_email='eburus@gmail.com',
+    version='0.0.1',
+    author='BramaBrama Ltd.',
+    author_email='help@spicycms.com',
     description='Spicy Categories',
     license='BSD',
     keywords='django, cms',
@@ -39,11 +39,10 @@ setup(
     namespace_packages=['spicy',],
 
     install_requires=[
-        'spicy>=1.1',
+        'spicy>=1.2.1',
     ],
 
     dependency_links=[
-        'hg+http://hg.bramabrama.com/spicy#egg=spicy',
     ],
 
     classifiers=[
