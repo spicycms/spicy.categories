@@ -7,7 +7,7 @@ spicy.categories
 
 
 Это простое приложение и использует по умолчанию типовые шаблоны и часть логики ``spicy.core.admin``.
-Вы можете путем конфигурации settings.py и наследования ``abs.AbstractCategory``,
+Вы можете путем конфигурации settings.py и наследования ``spicy.categories.abs.AbstractCategory``,
 создать собственную модель категорий и добавить логику к вашему приложению.
 Все доступные настройки по умолчанию находятся в [defaults.py](./src/spicy/categories/defaults.py). 
 
