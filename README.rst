@@ -1,4 +1,3 @@
-
 spicy.categories
 ================
 
@@ -126,3 +125,5 @@ Docs
 *****************
 TODO
 
+=======
+Django module for abstract and extensible categories

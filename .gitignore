@@ -1,18 +1,17 @@
 # use glob syntax.
 syntax: glob
 
-*.egg-info
 docs/_build
+
 .idea
-dist*
-build*
-spicy.egg*
 .DS_Store
 .project
 .pydevproject
 *.pyc
+.settings
 *.un~
 *~
+django
 build
 *.swp
 .\#*
@@ -32,3 +31,4 @@ build
 *.mp4
 # audio files
 *.mp3
+*.sqlite3
