@@ -1,6 +1,12 @@
 spicy.categories
 ================
 
+Приложение использует [концепцию разработки djangо-приложений SpicyCMS](https://github.com/spicycms/spicy.core).
+Это приложение-простое и использует шаблоны для интрефейса администрирования spicy.core.admin.
+Вы можете путем конфигурации settings.py и наследования ``abs.AbstractCategory``,
+создать собственную модель категорий и добавить логику к существующему приложению.
+Все доступные настройки по умолчанию находятся в [defaults.py](./src/spicy/categories/defaults.py). 
+
 **Версии**
 - Django 1.3 - 1.5
 - Python 2.7
@@ -10,7 +16,7 @@ spicy.categories
 
 Категории сделаны для того, чтобы редактор сайта, мог группировать данные.
 Быстро искать в панели адимнистратора и дать задачу разработчику на вывод данных по категрии в любом шаблоне сайта.
-Реализация под ваш проекта настаривается через settings.py и наследование модели ``abs.AbstractCategory``, все доступные настройки по умолчанию находятся в [defaults.py](./src/spicy/categories/defaults.py). 
+
 
 Для редактора сайта
 -------------------
@@ -24,16 +30,37 @@ spicy.categories
 [Django-templatetags](./src/spicy/categories/templatetags/)
 
 
+
 Подключаем категорию к вашей модели
 ----------------------------------
 
+Настраиваем Django приложение ``settings.py``
+
+```
+INSTALLED_APPS = (
+...
+'spicy.categories',
+...
+
+)
+```
+
+Подключаем категорию к вашей модели данных
+
+```
     # yourapp.models.py
     from django.db import models
     
     class YourModel(models.Model):
         # other fields
         category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
+```
 
+Выводим в шаблоне сайта модели по заданной категории, по slug.
+
+```
+{% category ... %}
+```
 
 Делаем свою модель категорий
 ----------------------------
