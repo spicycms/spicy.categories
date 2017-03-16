@@ -142,13 +142,17 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
 
 Таким образом, вы можете использовать разные формы для редактирования и создания категории в панели админстратора или добавить инструкции для редакторов прямо в шаблоны вашего проекта. ( [читайте подробнее про Spicy Admin panel](https://github.com/spicycms/spicy.core))
 
-Для поддержки
--------------
+
+Поддержка проекта
+=================
+
 
 По вопросам сотрудничества, предложений по улучшению кода, обращайтесь в наши каналы разработчиков:
 
-slack: https://bramabrama.slack.com/messages/spicycms_chief_editor
-mail:  help@spicycms.com
+
+* slack: https://bramabrama.slack.com/messages/spicycms_chief_editor
+* mail:  help@spicycms.com
+
 
 Для примеров коммерческих проектов на SpicyCMS, вы можете обратиться к нашим студиям-партнерам через сайт
  
