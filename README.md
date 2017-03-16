@@ -36,7 +36,33 @@ TODO
 
 **Примеры**
 
-TODO
+1. Подключение категории к документу
+
+В models.py приложения нужно добавить FK на модель категории:
+
+    class YourModel(models.Model):
+        # other fields
+        category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
+
+2. Расширение базовой модели категории
+
+Для добавления новых полей к категории, нужно в проекте переопределить модель:
+
+    # myapp.models.py
+
+    from spicy.categories.abs import AbstractCategory
+
+    class Category(AbstractCategory):
+        new_field = models.IntegerField('New field', null=True, blank=True)
+
+        @models.permalink
+        def get_absolute_url(self):
+            return 'webapp:public:category', None, {'slug': self.slug}
+
+        class Meta:
+            abstract = False
+
+
 
 
 **Docs**
