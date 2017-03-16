@@ -24,12 +24,6 @@ spicy.categories
 {TODO} сделать автоматический вывод сортировки по категории для списка статей или любых других объектов CMS.
 Динамическое подключение.
 
-Вывод объектов категорий в шаблонах сайта (frontend)
--------------------------
-
-[Django-templatetags](./src/spicy/categories/templatetags/)
-
-
 
 Подключаем категорию к вашей модели
 ----------------------------------
@@ -56,10 +50,32 @@ INSTALLED_APPS = (
         category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
 ```
 
-Выводим в шаблоне сайта модели по заданной категории, по slug.
-
+Выводим в шаблоне сайта модели по заданной категории, по slug:
 ```
-{% category ... %}
+{% category "slug" "app" "model" 10 %}
+	This is {{ doc.title }} document!
+{% endcategory %}
+```
+
+Выводим в шаблоне сайта модели по заданной категории, по slug, с пажинацией по 10 объектов на странице:
+```
+{% category "slug" 10 paginate as doc %}
+    This is {{ doc.title }} document!
+{% endcategory %}
+```
+
+Фильтрация объектов в шаблоне (реализованы только простые запросы):
+```
+{% category "slug" "app" "model" all 10 where owner__is_banned=True %}
+    Document {{ doc }} from a user that isn't banned. Parameter "all" disables default filtering.
+{% endcategory %}
+```
+
+Сортировка объектов (возможна по нескольким полям), с ключевым словом sorted:
+```
+{% category "slug" "app" "model" sorted title -pub_date %}
+    Document {{ doc }} sorted by title field ascending and pub_date field descending.
+{% endcategory %}
 ```
 
 Делаем свою модель категорий
@@ -105,9 +121,17 @@ INSTALLED_APPS = (
             model = CustomCategory
             fields = 'title', 'slug', 'order_lv', 'site', 'new_field'
             
-Добавить поле new_field в шаблоны админки:
+Добавить поле new_field в шаблоны админки templates/spicy.category/admin/edit.html и templates/spicy.category/admin/create.html:
 
-    
+```
+...
+{% block content %}
+    {# standard fields #}
+    {% formfield "" form "new_field" "li-select" %}
+    ...
+{% endblock %}
+...
+```    
 
 Таким образом, вы можете использовать разные формы для редактирования и создания категории.
 admin.AdminApp используется для отображения в меню и на главной странице разделов по управлению категориями.
