@@ -42,18 +42,18 @@ INSTALLED_APPS = (
 Подключаем категорию к вашей модели данных
 
 ```
-    # yourapp.models.py
-    from django.db import models
-    
-    class YourModel(models.Model):
-        # other fields
-        category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
+# yourapp.models.py
+from django.db import models
+
+class YourModel(models.Model):
+# other fields
+category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
 ```
 
 Выводим в шаблоне сайта модели по заданной категории, по slug:
 ```
 {% category "slug" "app" "model" 10 %}
-	This is {{ doc.title }} document!
+    This is {{ doc.title }} document!
 {% endcategory %}
 ```
 
