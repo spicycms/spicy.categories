@@ -61,10 +61,26 @@ spicy.categories
         class Meta:
             abstract = False
 
-По умолчанию для работы с категориями через админку и сайт используется форма forms.CategoryForm. Вы можете изменить это поведение, указав в setting.py:
+По умолчанию для работы с категориями через админку и сайт используется форма forms.CategoryForm. Вам нужно изменить это поведение, указав в setting.py:
 
     CREATE_CATEGORY_FORM = 'yourapp.forms.CustomCreateCategoryForm'
     EDIT_CATEGORY_FORM = 'yourapp.forms.CustomEditCategoryForm'
+    
+Добавить новую форму, в которой объявлено поле new_field:
+
+    # yourapp.forms.py
+    from django.conf import settings
+    from spicy.utils import get_custom_model_class
+    CustomCategory = get_custom_model_class(settings.CUSTOM_CATEGORY_MODEL)
+
+    class CategoryForm(forms.ModelForm):
+        class Meta:
+            model = CustomCategory
+            fields = 'title', 'slug', 'order_lv', 'site', 'new_field'
+            
+Добавить поле new_field в шаблоны админки:
+
+    
 
 Таким образом, вы можете использовать разные формы для редактирования и создания категории.
 admin.AdminApp используется для отображения в меню и на главной странице разделов по управлению категориями.
