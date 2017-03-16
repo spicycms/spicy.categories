@@ -78,12 +78,12 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
 
 Модуль содержит базовый абстрактный класс для Категории, который может быть расширен для конкретной сборки приложения. Поддерживает работу с несколькими сайтами посредством [django sites framework](https://djbook.ru/rel1.4/ref/contrib/sites.html).
 
-Для использования объектов категорий по умолчанию предоставляется класс Category. Вы можете использовать свой класс, для этого необходимо указать в settings.py:
+Для использования объектов категорий по умолчанию предоставляется класс ``spicy.categories.models.Category``. Вы можете использовать свой класс, для этого необходимо указать в settings.py:
 
     USE_DEFAULT_CATEGORY = False
     CUSTOM_CATEGORY_MODEL = 'yourapp.models.CustomCategory'
 
-Ваш класс должен наследоваться от AbstractCategory, также нужно указать Meta.abstract = False, чтобы Django создала таблицу для кастомных категорий.
+Ваш класс должен наследоваться от ``spicy.categories.abs.AbstractCategory``, также нужно указать ``Meta.abstract = False``, чтобы Django создала таблицу для кастомных категорий.
 
     # yourapp.models.py
     from django.db import models
@@ -128,7 +128,7 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
 Сделать индивидуальный интерфейс.
 
 Для индивидуального редактирования новых полей вашей модели в админке, 
-нужно создать копии шаблонов templates/spicy.category/admin/edit.html и templates/spicy.category/admin/create.html в своем проекте темы сайта или приложения( [читайте подробнее](https://github.com/spicycms/spicy.core)):
+нужно создать копии шаблонов ``templates/spicy.category/admin/edit.html`` и ``templates/spicy.category/admin/create.html`` в своем проекте темы сайта или приложения:
 
 ```
 ...
@@ -140,7 +140,16 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
 ...
 ```    
 
-Таким образом, вы можете использовать разные формы для редактирования и создания категории.
+Таким образом, вы можете использовать разные формы для редактирования и создания категории в панели админстратора или добавить инструкции для редакторов прямо в шаблоны вашего проекта. ( [читайте подробнее про Spicy Admin panel](https://github.com/spicycms/spicy.core))
 
+Для поддержки
+-------------
 
-admin.AdminApp используется для отображения в меню и на главной странице разделов по управлению категориями.
+По вопросам сотрудничества, предложений по улучшению кода, обращайтесь в наши каналы разработчиков:
+
+slack: https://bramabrama.slack.com/messages/spicycms_chief_editor
+mail:  help@spicycms.com
+
+Для примеров коммерческих проектов на SpicyCMS, вы можете обратиться к нашим студиям-партнерам через сайт
+ 
+https://bramabrama.com и почту sales@bramabrama.com
