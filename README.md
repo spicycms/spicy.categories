@@ -27,6 +27,9 @@ spicy.categories
 Подключаем категорию к вашей модели
 ----------------------------------
 
+    class YourModel(models.Model):
+        # other fields
+        category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
 
 
 Делаем свою модель категорий
@@ -34,13 +37,25 @@ spicy.categories
 
 Модуль содержит базовый абстрактный класс для Категории, который может быть расширен для конкретной сборки приложения. Поддерживает работу с несколькими сайтами посредством `Django Sites Framework <https://djbook.ru/rel1.4/ref/contrib/sites.html>`_ .
 
-
 Для использования объектов категорий по умолчанию предоставляется класс Category. Вы можете использовать свой класс, для этого необходимо указать в settings.py:
 
         ``USE_DEFAULT_CATEGORY = False``
         ``CUSTOM_CATEGORY_MODEL = 'yourapp.models.CustomCategory'``
 
 Ваш класс должен наследоваться от AbstractCategory, также нужно указать Meta.abstract = False, чтобы Django создала таблицу для кастомных категорий.
+
+    # yourapp.models.py
+    from spicy.categories.abs import AbstractCategory
+
+    class CustomCategory(AbstractCategory):
+        new_field = models.IntegerField('New field', null=True, blank=True)
+
+        @models.permalink
+        def get_absolute_url(self):
+            return 'webapp:public:category', None, {'slug': self.slug}
+
+        class Meta:
+            abstract = False
 
 По умолчанию для работы с категориями через админку и сайт используется форма forms.CategoryForm. Вы можете изменить это поведение, указав в setting.py:
 
