@@ -39,8 +39,8 @@ spicy.categories
 
 Для использования объектов категорий по умолчанию предоставляется класс Category. Вы можете использовать свой класс, для этого необходимо указать в settings.py:
 
-        ``USE_DEFAULT_CATEGORY = False``
-        ``CUSTOM_CATEGORY_MODEL = 'yourapp.models.CustomCategory'``
+    USE_DEFAULT_CATEGORY = False
+    CUSTOM_CATEGORY_MODEL = 'yourapp.models.CustomCategory'
 
 Ваш класс должен наследоваться от AbstractCategory, также нужно указать Meta.abstract = False, чтобы Django создала таблицу для кастомных категорий.
 
@@ -59,8 +59,8 @@ spicy.categories
 
 По умолчанию для работы с категориями через админку и сайт используется форма forms.CategoryForm. Вы можете изменить это поведение, указав в setting.py:
 
-        ``CREATE_CATEGORY_FORM = 'yourapp.forms.CustomCreateCategoryForm'``
-        ``EDIT_CATEGORY_FORM = 'yourapp.forms.CustomEditCategoryForm'``
+    CREATE_CATEGORY_FORM = 'yourapp.forms.CustomCreateCategoryForm'
+    EDIT_CATEGORY_FORM = 'yourapp.forms.CustomEditCategoryForm'
 
 Таким образом, вы можете использовать разные формы для редактирования и создания категории.
 admin.AdminApp используется для отображения в меню и на главной странице разделов по управлению категориями.
