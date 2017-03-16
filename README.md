@@ -27,6 +27,9 @@ spicy.categories
 Подключаем категорию к вашей модели
 ----------------------------------
 
+    # yourapp.models.py
+    from django.db import models
+    
     class YourModel(models.Model):
         # other fields
         category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
@@ -45,6 +48,7 @@ spicy.categories
 Ваш класс должен наследоваться от AbstractCategory, также нужно указать Meta.abstract = False, чтобы Django создала таблицу для кастомных категорий.
 
     # yourapp.models.py
+    from django.db import models
     from spicy.categories.abs import AbstractCategory
 
     class CustomCategory(AbstractCategory):
