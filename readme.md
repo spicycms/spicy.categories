@@ -106,11 +106,14 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
 
 По умолчанию для работы с категориями через админку и сайт используется форма forms.CategoryForm. Вам нужно изменить это поведение, указав в setting.py:
 
+```
     CREATE_CATEGORY_FORM = 'yourapp.forms.CustomCreateCategoryForm'
     EDIT_CATEGORY_FORM = 'yourapp.forms.CustomEditCategoryForm'
-    
+```
+
 Добавить новую форму, в которой объявлено поле new_field:
 
+```
     # yourapp.forms.py
     from django.conf import settings
     from spicy.utils import get_custom_model_class
@@ -120,8 +123,16 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
         class Meta:
             model = CustomCategory
             fields = 'title', 'slug', 'order_lv', 'site', 'new_field'
-            
-Добавить поле new_field в шаблоны админки templates/spicy.category/admin/edit.html и templates/spicy.category/admin/create.html:
+```    
+
+Настройки индивидуальной панель администрирования для категорий
+---------------------------------------------------------------
+
+По умолчанию, как и в Django приложении, все модели редактируются в панели администрирования,
+но концепция SpicyCMS, предполагает разработку интерфейсов под нужды оператора, чтобы ускорить и упросить его работу.
+
+Для индивидуального редактирования новых полей вашей модели в админке, 
+нужно создать копии шаблонов templates/spicy.category/admin/edit.html и templates/spicy.category/admin/create.html в своем проекте темы сайта или приложения:
 
 ```
 ...
@@ -134,4 +145,6 @@ category = models.ForeignKey('Category', blank=True, null=True, on_delete=models
 ```    
 
 Таким образом, вы можете использовать разные формы для редактирования и создания категории.
+
+
 admin.AdminApp используется для отображения в меню и на главной странице разделов по управлению категориями.
