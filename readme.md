@@ -45,6 +45,11 @@ class YourModel(models.Model):
 category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.SET_NULL, verbose_name=_('Category'))
 ```
 
+Для использования шаблонных тегов подключите их в начале файла:
+```
+{% import categories %}
+```
+
 Выводим в шаблоне сайта модели по заданной категории, по slug:
 ```
 {% category "slug" "app" "model" 10 %}
