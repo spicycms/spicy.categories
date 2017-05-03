@@ -46,7 +46,9 @@ def category_list(request):
     nav = NavigationFilter(request)
     paginator = nav.get_queryset_with_paginator(Category)
     objects_list = paginator.current_page.object_list
-    return {'paginator': paginator, 'objects_list': objects_list, 'nav': nav}
+    return {'paginator': paginator,
+            'objects_list': objects_list,
+            'nav': nav}
 
 
 @is_staff(required_perms=add_perm(defaults.CUSTOM_CATEGORY_MODEL))
@@ -55,10 +57,12 @@ def create(request):
     if request.method == 'POST':
         form = CategoryCreateForm(request.POST)
         if form.is_valid():
-            form.save()
-            return http.HttpResponseRedirect(reverse('categories:admin:index'))
+            ctg = form.save()
+            return http.HttpResponseRedirect(
+                reverse('categories:admin:edit', args=[ctg.pk]))
     else:
-        form = CategoryCreateForm(initial={'site': Site.objects.get_current()})
+        form = CategoryCreateForm(
+            initial={'site': Site.objects.get_current()})
     return {'form': form}
 
 
@@ -70,8 +74,6 @@ def edit(request, category_id):
         form = CategoryEditForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return http.HttpResponseRedirect(reverse(
-                'categories:admin:index'))
     else:
         form = CategoryEditForm(instance=category)
     return {'form': form}

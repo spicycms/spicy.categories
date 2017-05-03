@@ -23,7 +23,7 @@ class CategoryNode(template.Node):
     def __init__(
             self, nodelist, slug, app=None, model=None, num_per_page=None,
             paginate=False, object_name='doc', filter_query=None, labels=None,
-            show_all=False, sort=None):
+            show_all=False, sort=None, show_prev_objects=None):
         self.nodelist = nodelist
         self.slug = template.Variable(slug)
         self.app = template.Variable(app)
@@ -38,6 +38,7 @@ class CategoryNode(template.Node):
         self.sort = sort
         self.filter_query = [
             q.split('=') for q in (filter_query or '').split(',') if q]
+        self.show_prev_objects = show_prev_objects
 
     def render(self, context):
         for var in (True, False, None):
@@ -100,8 +101,12 @@ class CategoryNode(template.Node):
             context['paginator'] = paginator
             page = paginator.page(page_num)
             context['pages'] = page
-            paginator.current_page = page
-            objs = page.object_list
+            if self.show_prev_objects:
+                objs = []
+                for num in range(1, page_num+1):
+                    prev_page_objs = paginator.page(num).object_list
+                    objs.extend(prev_page_objs)
+                paginator.current_page = page
         else:
             objs = objects[:self.num_per_page.resolve(context)]
 
@@ -148,6 +153,13 @@ def category(parser, token):
         Document {{ doc }} sorted by title field ascending and pub_date
          field descending.
         {% endcategory %}
+
+    Documents may be displayed with ajax-style pagination:
+        {% category "energy_slug" "webapp" "document" 10 paginate show_prev_objects %}
+        Documents with {{ energy_slug }} will be paginated by {{ 10 }} objects per page
+        and when user click on MORE OBJECTS button, new object will be extended to
+        already existed
+        {% endcategory %}
     """
     bits = token.split_contents()
 
@@ -189,6 +201,9 @@ def category(parser, token):
                 options['object_name'] = obj_name
             else:
                 options['filter_query'] = obj_name
+            continue
+        if option == 'show_prev_objects':
+            options['show_prev_objects'] = True
             continue
         elif option == 'sorted':
             options['sort'] = remaining_bits
