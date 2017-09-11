@@ -107,6 +107,9 @@ class CategoryNode(template.Node):
                     prev_page_objs = paginator.page(num).object_list
                     objs.extend(prev_page_objs)
                 paginator.current_page = page
+            else:
+                paginator.current_page = page
+                objs = page.object_list
         else:
             objs = objects[:self.num_per_page.resolve(context)]
 
@@ -137,7 +140,7 @@ def category(parser, token):
 
     Additionally, it can be used for displaying pagination:
 
-        {% category "blog" 10 paginate as doc %}
+        {% category "blog" "presscenter" "document" 10 paginate as doc %}
         This is {{ doc.title }} document!
         {% endcategory %}
 
